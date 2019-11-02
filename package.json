@@ -1,0 +1,29 @@
+{
+  "name": "@vipulc/frontend-masters-downloader",
+  "version": "1.0.0",
+  "description": "Frontend masters course downloader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vpul/frontend-masters-downloader.git"
+  },
+  "keywords": [
+    "frontend-masters",
+    "download",
+    "course",
+    "frontend",
+    "masters"
+  ],
+  "author": "Vipul Chaudhary",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vpul/frontend-masters-downloader/issues"
+  },
+  "homepage": "https://github.com/vpul/frontend-masters-downloader#readme",
+  "devDependencies": {
+    "eslint": "^6.6.0"
+  }
+}
