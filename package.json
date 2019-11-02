@@ -25,5 +25,10 @@
   "homepage": "https://github.com/vpul/frontend-masters-downloader#readme",
   "devDependencies": {
     "eslint": "^6.6.0"
+  },
+  "dependencies": {
+    "@vipulc/line-match": "^1.0.3",
+    "axios": "^0.19.0",
+    "yargs": "^14.2.0"
   }
 }
