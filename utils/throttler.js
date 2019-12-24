@@ -7,7 +7,7 @@ const limiter = new Bottleneck({
 });
 
 const axiosSetCookie = (cookie) => {
-  return async (url) => {
+  return async (url, responseType = 'json') => {
     const axiosConfig = {
       headers: {
         'Cookie': cookie,
@@ -15,6 +15,7 @@ const axiosSetCookie = (cookie) => {
       },
       method: 'get',
       url,
+      responseType,
     }
     return axios(axiosConfig);
   };
