@@ -1,34 +1,62 @@
-const axios = require('axios');
+const fs = require('fs');
 const { argv } = require('yargs');
-const getCookieByLoggingIn = require('./getCookieByLoggingIn');
+const { axiosSetCookie, limiter } = require('./utils/throttler');
+// const getCookieByLoggingIn = require('./getCookieByLoggingIn');
 
+// const cookieJSON = JSON.parse(fs.readFileSync('./cookie.json', 'utf-8'));
+// const cookieParse = cookieJSON.filter(element => element.name=);
+// console.log(cookieJSON);
 
-// cookie = 'intercom-id-w1ukcwje=0302ec84-f0dc-456d-bb9e-36d23cd53215; __stripe_mid=d1b184d7-862b-4409-b814-d67d7ae8f9f4; ajs_user_id=%2240494%22; ajs_group_id=null; ajs_anonymous_id=%22ea4dda62-81a3-4b28-919e-3d5f8dc6ce79%22; intercom-session-w1ukcwje=VmE2WVFZamt1bXh4OXF3SGU2d1dDeDlvTnJzNUR4WHRDTy81WFF3RDY2WHRPWlloMUpFdmJac1JzWTBOK0RkZi0tUVBxbnVtc1QrUSsvZXYvQXpUb1hxZz09--d87e51ca321da3ffdab021d94e817abf09de1be2; edd_wp_session=e29c14d0f16f5a062ad4ad296c0c1c5d%7C%7C1571891177%7C%7C1571889377; wordpress_logged_in_323a64690667409e18476e5932ed231e=vpul.chaudhary_gmail.com%7C1573057577%7CQFGGlj5Plx7ccMhrW79EEFEbVutmLnab9RPWvAHmShO%7C527639494cc596c9d57225ffb89a00fa9cfc693f5f9d7dca5baae820db0e5e34'
-getCookieByLoggingIn()
+// (async () => {
+//   //check if cookies.txt exists
+//   //if doesn't exist login and get cookies
+//   //if exists try using that cookie
+//   //if error get fresh cookie by login
+// })();
+// getCookieByLoggingIn(argv)
+const cookie = fs.readFileSync(argv.cookiefile, 'utf8');
+const resolution = argv.resolution || '720';
 
+const axiosWrapper = axiosSetCookie(cookie); // create an axios wrapper with the provided cookie
+const throttledAxios = limiter.wrap(axiosWrapper); // use the axios wrapper in the limiter to create throttled axios
 
+const slug = argv.courseurl.split('/courses/')[1];
 
+(async () => {
+  const { data: course } = await throttledAxios(`https://api.frontendmasters.com/v1/kabuki/courses/${slug}`);
+  if (!fs.existsSync(`./${course.title}`)) {
+    fs.mkdirSync(`./${course.title}`);
+  }
 
+  const unit = {
+    index: 0,
+  };
+  course.lessonElements.forEach(async element => {
+    try {
+      if (typeof (element) === 'string') {
+        unit.name = element;
+        unit.index++;
+        fs.mkdirSync(`./${course.title}/${unit.index}. ${unit.name}`);
+      } else {
+        const lessonHash = course.lessonHashes[element];
+        console.log(lessonHash);
+        const sourceURL = `https://api.frontendmasters.com/v1/kabuki/video/${lessonHash}/source?r=${resolution}&f=webm`;
+        const videoURL = await throttledAxios(sourceURL);
+        console.log(videoURL.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+})();
 
-// axios.defaults.headers.cookie = argv.cookie;
-// axios.defaults.headers.referer = 'https://frontendmasters.com';
-
-// const slug = argv.courseurl.split('/courses/')[1];
-
-// axios.get(`https://api.frontendmasters.com/v1/kabuki/courses/${slug}`)
+// // axios.get('https://api.frontendmasters.com/v1/kabuki/courses/mongodb')
+// axios.get('https://api.frontendmasters.com/v1/kabuki/video/HEjgFFooHO/source?r=1080&f=webm')
 //   .then((res) => {
 //     console.log(res.data);
 //   }).catch((err) => {
 //     console.log(err);
 //   });
-
-// // axios.get('https://api.frontendmasters.com/v1/kabuki/courses/mongodb')
-// // axios.get('https://api.frontendmasters.com/v1/kabuki/video/NCrWTwSgDw/source?r=1080&f=webm')
-// //   .then((res) => {
-// //     console.log(res.data);
-// //   }).catch((err) => {
-// //     console.log(err);
-// //   });
 
 // // https://api.frontendmasters.com/v1/kabuki/video/NCrWTwSgDw/source?r=1080&f=webm
 

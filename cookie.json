@@ -1,0 +1,72 @@
+[
+    {
+        "name": "__stripe_mid",
+        "value": "699b1cff-cc67-49c5-93e7-6de5ce7cac77",
+        "domain": ".frontendmasters.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1606387931,
+        "storeId": null
+    },
+    {
+        "name": "edd_wp_session",
+        "value": "52cb552dbb66eb948473a928fd6f3c52%7C%7C1575930124%7C%7C1575928324",
+        "domain": ".frontendmasters.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1575930126,
+        "storeId": null
+    },
+    {
+        "name": "intercom-id-w1ukcwje",
+        "value": "fbbe9b0b-b41c-4664-867f-56efce0de4d3",
+        "domain": ".frontendmasters.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1595350914,
+        "storeId": null
+    },
+    {
+        "name": "intercom-session-w1ukcwje",
+        "value": "a0RUR05mVHRRZXUwK2xkQjFMRzQyVm9yMWEvSjJqdGhERFFML01aRkxsU2oxdlYvZ3ZrNnh2WHVBMFY2cWhTTi0teEtEWHUwUS8raTM5MXNQMjJSOEMrZz09--c35c50c38fcb2b51949b414abf738ed564de3daf",
+        "domain": ".frontendmasters.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "lax",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1576578404,
+        "storeId": null
+    },
+    {
+        "name": "wordpress_logged_in_323a64690667409e18476e5932ed231e",
+        "value": "vpul.chaudhary_gmail.com%7C1577096524%7CCxWTgVsd9LdBWgzQXkHTHUL6GnSkJA0nJQmpBa379g7%7Cbe29558056f60608c2d4a790868093a0a323ad1ace384baff5c0894980948eda",
+        "domain": ".frontendmasters.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": true,
+        "httpOnly": true,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1577139726,
+        "storeId": null
+    }
+]
