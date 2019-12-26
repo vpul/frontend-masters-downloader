@@ -2,7 +2,7 @@ const ProgressBar = require('progress');
 const path = require('path');
 const fs = require('fs');
 
-module.exports = async (url, throttledAxios, filePath) => {
+module.exports = async (url, filePath, throttledAxios) => {
   const { data, headers } = await throttledAxios(url, 'stream');
   const totalLength = headers['content-length']
 
@@ -13,7 +13,7 @@ module.exports = async (url, throttledAxios, filePath) => {
     incomplete: ' ',
     renderThrottle: 1,
     total: parseInt(totalLength)
-  })
+  });
 
   const writer = fs.createWriteStream(
     path.resolve(__dirname, '..', filePath)
