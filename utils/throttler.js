@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
-  minTime: 10000  // one request per 10 seconds
+  minTime: 60000  // one request per 60 seconds
 });
 
 const axiosSetCookie = (cookie) => {

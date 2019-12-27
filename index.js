@@ -21,7 +21,7 @@ const slug = argv.courseurl.split('/courses/')[1];
     index: 0,
   };
 
-  let lesson = {};
+  const lesson = {};
   for (let element of course.lessonElements) {
     try {
       if (typeof (element) === 'string') {
@@ -34,12 +34,10 @@ const slug = argv.courseurl.split('/courses/')[1];
         lesson.index++;
         const lessonHash = course.lessonHashes[element];
         const sourceURL = `https://api.frontendmasters.com/v1/kabuki/video/${lessonHash}/source?r=${resolution}&f=webm`;
-        const videoURL = await throttledAxios(sourceURL);
-
-        // download(videoURL.data.url,);
+        const { data: videoSource } = await throttledAxios(sourceURL);
         lesson.title = sanitizeFilename(course.lessonData[lessonHash].title);
         lesson.fileName = `${unit.index}.${lesson.index} ${lesson.title}`;
-        console.log(videoURL.data.url, `${lesson.directory}/${lesson.fileName}`);
+        download(videoSource.url, `${lesson.directory}/${lesson.fileName}.webm`, throttledAxios);
       }
     } catch (err) {
       console.error(err);
