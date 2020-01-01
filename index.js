@@ -13,15 +13,31 @@ const throttledAxios = limiter.wrap(axiosWrapper); // use the axios wrapper in t
 
 const slug = argv.courseurl.split('/courses/')[1];
 
+// read download.log and return download session
+const readDownloadLog = () => {
+  try {
+    if (fs.existsSync(`${__dirname}/download.log`)) {
+      const downloadSession = fs.readFileSync(`${__dirname}/download.log`, 'utf8');
+      return JSON.parse(downloadSession);
+    }
+    return {};
+  } catch (err) {
+    console.error('Error reading \'download.log\' file\n' + err);
+  }
+
+};
+
 (async () => {
+  const downloadSession = readDownloadLog();
+  if (downloadSession[slug] === undefined) downloadSession[slug] = [];
   const { data: course } = await throttledAxios(`https://api.frontendmasters.com/v1/kabuki/courses/${slug}`);
   course.title = sanitizeFilename(course.title);
   makeDirectory(course.title);
   const unit = {
     index: 0,
   };
-
   const lesson = {};
+
   for (let element of course.lessonElements) {
     try {
       if (typeof (element) === 'string') {
@@ -33,11 +49,16 @@ const slug = argv.courseurl.split('/courses/')[1];
       } else {
         lesson.index++;
         const lessonHash = course.lessonHashes[element];
-        const sourceURL = `https://api.frontendmasters.com/v1/kabuki/video/${lessonHash}/source?r=${resolution}&f=webm`;
-        const { data: videoSource } = await throttledAxios(sourceURL);
         lesson.title = sanitizeFilename(course.lessonData[lessonHash].title);
         lesson.fileName = `${unit.index}.${lesson.index} ${lesson.title}`;
-        download(videoSource.url, `${lesson.directory}/${lesson.fileName}.webm`, throttledAxios);
+        // if video file already exists and download.log contains the video hash, skip download
+        const videoFileExists = fs.existsSync(`${__dirname}/${lesson.directory}/${lesson.fileName}.webm`);
+        if (downloadSession[slug].includes(lessonHash) && videoFileExists) continue;
+        const sourceURL = `https://api.frontendmasters.com/v1/kabuki/video/${lessonHash}/source?r=${resolution}&f=webm`;
+        const { data: videoSource } = await throttledAxios(sourceURL);
+        await download(videoSource.url, `${lesson.directory}/${lesson.fileName}.webm`, throttledAxios);
+        downloadSession[slug].push(lessonHash);
+        fs.writeFileSync('download.log', JSON.stringify(downloadSession));
       }
     } catch (err) {
       console.error(err);

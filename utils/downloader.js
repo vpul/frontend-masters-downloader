@@ -4,9 +4,9 @@ const fs = require('fs');
 
 module.exports = async (url, filePath, throttledAxios) => {
   const { data, headers } = await throttledAxios(url, 'stream');
-  const totalLength = headers['content-length']
+  const totalLength = headers['content-length'];
 
-  console.log('Starting download')
+  console.log('Starting download');
   const progressBar = new ProgressBar('-> downloading [:bar] :percent :etas', {
     width: 40,
     complete: '=',
